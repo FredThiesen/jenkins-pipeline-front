@@ -1,71 +1,61 @@
-var express=require("express");
+var express = require("express")
 //middleware - irá fazer um parser do dados do front e formatar em req.body
-var bodyParser = require('body-parser')
+var bodyParser = require("body-parser")
 //framework express
-var app=express();
+var app = express()
 // 3000 is an example port
-const port = process.env.PORT || 8000
+const port = process.env.PORT || 3001
 //express-handlebars - https://github.com/ericf/express-handlebars
-const { engine }   = require('express-handlebars');
-// define a extensão e a instância do handlebars com o 
+const { engine } = require("express-handlebars")
+// define a extensão e a instância do handlebars com o
 //modelo que será interpretado o código  . Todos arquivos html devem terminar
 //com .hbs
 
-const service=require("./services/cadastro.service");
+const service = require("./services/cadastro.service")
 
-
-
-app.engine('hbs', engine({extname: '.hbs',defaultLayout: null}));
+app.engine("hbs", engine({ extname: ".hbs", defaultLayout: null }))
 
 // define qual o template a ser utilizado no express
-app.set('view engine', 'hbs');
+app.set("view engine", "hbs")
 //define onde estão as views .hbs
-app.set("views", "./views");
+app.set("views", "./views")
 //define o uso do body parser
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
 
+app.get("/", function (req, res) {
+	res.render("form", {})
+})
 
+app.get("/info", async function (req, res) {
+	const response = await service.getInfo()
+	console.log(response.data.user)
+	res.render("form", { codigo_usuario: 12345, nome_usuario: "joao" })
+})
 
-app.get("/", function(req,res){
-    res.render('form',{})
-});
+app.post("/gravar", async function (req, res) {
+	const response = await service.salvaCadastro({
+		codigo: req.body.codigo,
+		nome: req.body.nome,
+		endereco: req.body.endereco,
+	})
+	console.log(response.data)
+	res.render("form")
+})
 
-app.get("/info", async function(req,res){
-    const response= await service.getInfo();
-    console.log(response.data.user);
-    res.render('form',{codigo_usuario:12345,nome_usuario:"joao"})
-    
-});
+app.get("/buscarTodos", async function (req, res) {
+	const { data } = await service.getDados()
+	console.log(data)
+	res.render("form", data)
+})
 
-app.post("/gravar", async function(req,res){
-    
-    const response= await service.salvaCadastro({codigo:req.body.codigo,
-                                                 nome:req.body.nome,
-                                                 endereco:req.body.endereco});
-    console.log(response.data);
-    res.render('form');
-    
-});
+app.get("/buscar/:key", async function (req, res) {
+	const key = req.params.key
+	const { data } = await service.getDadosPorChave(key)
+	console.log(data)
+	res.render("form", { data })
+})
 
-app.get("/buscarTodos", async function(req,res){
-    const {data}= await service.getDados();
-    console.log(data);
-    res.render('form',data)
-    
-});
-
-app.get("/buscar/:key", async function(req,res){
-    const key=req.params.key;
-    const {data}= await service.getDadosPorChave(key);
-    console.log(data);
-    res.render('form',{data})
-    
-});
-
-
-
-
-app.listen(port,function(){
-    console.log("Frontend está rodando na porta:"+port);
+app.listen(port, function () {
+	console.log("Frontend está rodando na porta:" + port)
 })
