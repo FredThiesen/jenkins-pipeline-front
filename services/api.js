@@ -4,7 +4,7 @@ const axios = require("axios").default
 // http://localhost:3000
 
 const api = axios.create({
-	baseURL: "http://193.123.114.150",
+	baseURL: "/backend",
 })
 
 module.exports = api
