@@ -9,7 +9,7 @@ pipeline {
         }
         stage('Deploy') {
             steps {
-                sh 'sudo pm2 start main.js'
+                sh 'sudo pm2 restart main.js'
                 sh 'sudo pm2 save'
             }
         }
