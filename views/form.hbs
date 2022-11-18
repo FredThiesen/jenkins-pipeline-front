@@ -25,9 +25,9 @@
 	<input type="submit" value="Buscar" />
 </form>
 
-<form action="/buscar/:key" method="GET">
+<form action="/buscar/{{codigo}}" method="GET">
 	<label>Codigo</label>
-	<input type="text" name="codigo" disabled value="{{codigo}}" />
+	<input type="text" name="codigo" value="{{codigo}}" />
 	<label>Nome</label>
 	<input type="text" name="nome" disabled value="{{nome}}" />
 	<label>Endereço</label>
