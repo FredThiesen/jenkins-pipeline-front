@@ -29,7 +29,7 @@
 	<input type="submit" value="Buscar" />
 </form>
 
-<form action="/buscar/{{codigo}}" method="GET">
+<form method="GET">
 	<label>Codigo</label>
 	<input type="text" name="codigo" id="codigo" value="{{codigo}}" />
 	<label>Nome</label>
@@ -37,5 +37,5 @@
 	<label>Endereço</label>
 	<input type="text" name="nome" disabled value="{{endereco}}" />
 	{{! buscar pelo codigo }}
-	<input type="submit" value="Buscar" onclick="getClient()" />
+	<button type="submit" value="Buscar" onclick="getClient()"></button>
 </form>
